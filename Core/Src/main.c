@@ -54,8 +54,9 @@ static uint32_t blink_timeouts[LEDMODE_NUMBER] = {
 #undef ENTRY
 };
 
-static size_t blink_mode      = 0;
-static size_t blink_iteration = 0;
+static size_t blink_mode              = 0;
+static size_t blink_iteration         = 0;
+static size_t blink_iteration_timeout = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,10 +106,19 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    LED_Blink(blink_array[blink_mode][blink_iteration], blink_timeouts[blink_mode]);
+    LED_Blink(blink_array[blink_mode][blink_iteration]);
 
+    while (blink_iteration_timeout++ < blink_timeouts[blink_mode]) {
+      HAL_Delay(1);
+    }
+
+    blink_iteration_timeout = 0;
     blink_iteration++;
-    blink_iteration %= LEDBLINK_NUMBER_ITERATION;
+
+    if (blink_iteration == LEDBLINK_NUMBER_ITERATION) {
+      blink_iteration = 0;
+    }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -175,8 +185,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : BTN_CHANGE_MODE_Pin */
   GPIO_InitStruct.Pin  = BTN_CHANGE_MODE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_CHANGE_MODE_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED2_Pin LED1_Pin LED3_Pin LED4_Pin */
@@ -204,19 +214,21 @@ static inline uint8_t get_bit(const uint8_t bitmap, const uint8_t index)
 
 void LED_ChangeMode(void)
 {
+  blink_iteration_timeout = UINT32_MAX;
+  blink_iteration         = 0;
   blink_mode++;
-  blink_iteration = 0;
 
-  blink_mode %= LEDMODE_NUMBER;
+  if (blink_mode == LEDMODE_NUMBER) {
+    blink_mode = 0;
+  }
 }
 
-void LED_Blink(const uint8_t led_state_bitmap, const uint32_t delay)
+void LED_Blink(const uint8_t led_state_bitmap)
 {
   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, get_bit(led_state_bitmap, 0));
   HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, get_bit(led_state_bitmap, 1));
   HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, get_bit(led_state_bitmap, 2));
   HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, get_bit(led_state_bitmap, 3));
-  HAL_Delay(delay);
 }
 
 /* USER CODE END 4 */
