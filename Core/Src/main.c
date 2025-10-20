@@ -185,6 +185,25 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+static inline uint8_t get_bit(const uint8_t bitmap, const uint8_t index)
+{
+  return (bitmap >> index) & 1;
+}
+
+void LED_ChangeMode(const uint8_t mode)
+{
+  
+}
+
+void LED_Blink(const uint8_t led_state_bitmap, const uint32_t delay)
+{
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, get_bit(led_state_bitmap, 0));
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, get_bit(led_state_bitmap, 1));
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, get_bit(led_state_bitmap, 2));
+  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, get_bit(led_state_bitmap, 3));
+  HAL_Delay(delay);
+}
+
 /* USER CODE END 4 */
 
 /**

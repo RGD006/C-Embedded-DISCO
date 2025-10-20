@@ -53,7 +53,8 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void LED_ChangeMode(const uint8_t mode);
+void LED_Blink(const uint8_t led_state_bitmap, const uint32_t delay);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
