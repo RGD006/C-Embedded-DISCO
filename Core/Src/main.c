@@ -27,12 +27,11 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
-typedef void (*led_blink_f)(void);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LEDBLINK_NUMBER_ITERATION (4)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,13 +42,20 @@ typedef void (*led_blink_f)(void);
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static led_blink_f blink_functions[LEDMODE_NUMBER] = {
-#define ENTRY(LEDMODE, FUNCTION) FUNCTION,
+static uint8_t blink_array[LEDMODE_NUMBER][LEDBLINK_NUMBER_ITERATION] = {
+#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) {BITMAP1, BITMAP2, BITMAP3, BITMAP4},
     LEDMODE_TABLE
 #undef ENTRY
 };
 
-static size_t blink_mode = 0;
+static uint32_t blink_timeouts[LEDMODE_NUMBER] = {
+#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) TIMEOUT,
+    LEDMODE_TABLE
+#undef ENTRY
+};
+
+static size_t blink_mode      = 0;
+static size_t blink_iteration = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,7 +105,10 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    blink_functions[blink_mode]();
+    LED_Blink(blink_array[blink_mode][blink_iteration], blink_timeouts[blink_mode]);
+
+    blink_iteration++;
+    blink_iteration %= LEDBLINK_NUMBER_ITERATION;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -196,56 +205,9 @@ static inline uint8_t get_bit(const uint8_t bitmap, const uint8_t index)
 void LED_ChangeMode(void)
 {
   blink_mode++;
+  blink_iteration = 0;
 
   blink_mode %= LEDMODE_NUMBER;
-}
-
-void LED_BlinkAll(void)
-{
-  LED_Blink(0b00001111, 1000);
-  LED_Blink(0b00000000, 1000);
-}
-
-void LED_BlinkChase(void)
-{
-  LED_Blink(0b00001000, 100);
-  LED_Blink(0b00000100, 100);
-  LED_Blink(0b00000010, 100);
-  LED_Blink(0b00000001, 100);
-}
-
-void LED_BlinkAlternate(void)
-{
-  LED_Blink(0b00001010, 300);
-  LED_Blink(0b00000101, 300);
-}
-
-void LED_BlinkScanner(void)
-{
-  LED_Blink(0b0001100, 500);
-  LED_Blink(0b0000110, 500);
-  LED_Blink(0b0000011, 500);
-  LED_Blink(0b0001001, 500);
-}
-
-void LED_BlinkSpin(void)
-{
-  LED_Blink(0b00001110, 100);
-  LED_Blink(0b00000111, 100);
-  LED_Blink(0b00001011, 100);
-  LED_Blink(0b00001101, 100);
-}
-
-void LED_BlinkPingPong(void)
-{
-  LED_Blink(0b00001001, 1000);
-  LED_Blink(0b00000110, 1000);
-}
-
-void LED_BlinkTwinkle(void)
-{
-  LED_Blink(0b00000101, 500);
-  LED_Blink(0b00001010, 500);
 }
 
 void LED_Blink(const uint8_t led_state_bitmap, const uint32_t delay)

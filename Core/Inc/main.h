@@ -46,17 +46,17 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#define LEDMODE_TABLE                          \
-  ENTRY(LEDMODE_ALL, LED_BlinkAll)             \
-  ENTRY(LEDMODE_CHASE, LED_BlinkChase)         \
-  ENTRY(LEDMODE_ALTERNATE, LED_BlinkAlternate) \
-  ENTRY(LEDMODE_SCANNER, LED_BlinkScanner)     \
-  ENTRY(LEDMODE_SPIN, LED_BlinkSpin)           \
-  ENTRY(LEDMODE_PING_PONG, LED_BlinkPingPong)  \
-  ENTRY(LEDMODE_TWINKLE, LED_BlinkTwinkle)
+#define LEDMODE_TABLE                                                           \
+  ENTRY(LEDMODE_ALL, 0b00001111, 0b00000000, 0b00001111, 0b00000000, 1000)      \
+  ENTRY(LEDMODE_CHASE, 0b00001000, 0b00000100, 0b00000010, 0b00000001, 100)     \
+  ENTRY(LEDMODE_ALTERNATE, 0b00001010, 0b00000101, 0b00001010, 0b00000101, 500) \
+  ENTRY(LEDMODE_SCANNER, 0b00001100, 0b00000110, 0b00000011, 0b00001001, 100)   \
+  ENTRY(LEDMODE_SPIN, 0b00001110, 0b00000111, 0b00001011, 0b00001101, 50)       \
+  ENTRY(LEDMODE_PING_PONG, 0b00001001, 0b00000110, 0b00001001, 0b00000110, 300) \
+  ENTRY(LEDMODE_TWINKLE, 0b00000101, 0b00001010, 0b00000101, 0b00001010, 1500)
 
 typedef enum {
-#define ENTRY(LEDMODE, FUNCTION) LEDMODE,
+#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) LEDMODE,
   LEDMODE_TABLE
 #undef ENTRY
       LEDMODE_NUMBER,
@@ -69,13 +69,6 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 void LED_ChangeMode(void);
 void LED_Blink(const uint8_t led_state_bitmap, const uint32_t delay);
-void LED_BlinkAll(void);
-void LED_BlinkChase(void);
-void LED_BlinkAlternate(void);
-void LED_BlinkScanner(void);
-void LED_BlinkSpin(void);
-void LED_BlinkPingPong(void);
-void LED_BlinkTwinkle(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
