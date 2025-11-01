@@ -43,17 +43,6 @@
 TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
-static uint8_t blink_array[LEDMODE_NUMBER][LEDBLINK_NUMBER_ITERATION] = {
-#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) {BITMAP1, BITMAP2, BITMAP3, BITMAP4},
-    LEDMODE_TABLE
-#undef ENTRY
-};
-
-static uint32_t blink_timeouts[LEDMODE_NUMBER] = {
-#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) TIMEOUT,
-    LEDMODE_TABLE
-#undef ENTRY
-};
 
 static size_t blink_mode              = 0;
 static size_t blink_iteration         = 0;
@@ -104,25 +93,20 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  TIM4->CCR1 = 171; // Duty cycle for Green LED (67%)
+  TIM4->CCR2 = 54;  // Duty cycle for Orange LED (21%)
+  TIM4->CCR3 = 97;  // Duty cycle for Red LED (38%)
+  TIM4->CCR4 = 123; // Duty cycle for Blue LED (50%)
+
   while (1) {
-    LED_Blink(blink_array[blink_mode][blink_iteration]);
-
-    while (blink_iteration_timeout++ < blink_timeouts[blink_mode]) {
-      HAL_Delay(1);
-    }
-
-    blink_iteration_timeout = 0;
-    blink_iteration++;
-
-    if (blink_iteration == LEDBLINK_NUMBER_ITERATION) {
-      blink_iteration = 0;
-    }
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -283,10 +267,6 @@ void LED_ChangeMode(void)
 
 void LED_Blink(const uint8_t led_state_bitmap)
 {
-  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, get_bit(led_state_bitmap, 0));
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, get_bit(led_state_bitmap, 1));
-  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, get_bit(led_state_bitmap, 2));
-  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, get_bit(led_state_bitmap, 3));
 }
 
 /* USER CODE END 4 */
