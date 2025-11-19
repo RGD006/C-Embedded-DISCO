@@ -46,34 +46,27 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#define LEDMODE_TABLE                                                       \
-  ENTRY(LEDMODE_ALL, 0b00001111, 0b00000000, 0b00001111, 0b00000000, 500)   \
-  ENTRY(LEDMODE_CHASE, 0b00001000, 0b00000100, 0b00000010, 0b00000001, 500) \
-  ENTRY(LEDMODE_SPIN, 0b00001110, 0b00000111, 0b00001011, 0b00001101, 500)  \
-  ENTRY(LEDMODE_PING_PONG, 0b00001001, 0b00000110, 0b00001001, 0b00000110, 500)
 
-typedef enum {
-#define ENTRY(LEDMODE, BITMAP1, BITMAP2, BITMAP3, BITMAP4, TIMEOUT) LEDMODE,
-  LEDMODE_TABLE
-#undef ENTRY
-      LEDMODE_NUMBER,
-} LEDMODE;
 /* USER CODE END EM */
-
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void LED_ChangeMode(void);
-void LED_Blink(const uint8_t led_state_bitmap);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 #define BTN_CHANGE_MODE_Pin GPIO_PIN_0
 #define BTN_CHANGE_MODE_GPIO_Port GPIOA
 #define BTN_CHANGE_MODE_EXTI_IRQn EXTI0_IRQn
+#define LED1_Pin GPIO_PIN_12
+#define LED1_GPIO_Port GPIOD
+#define LED2_Pin GPIO_PIN_13
+#define LED2_GPIO_Port GPIOD
+#define LED3_Pin GPIO_PIN_14
+#define LED3_GPIO_Port GPIOD
+#define LED4_Pin GPIO_PIN_15
+#define LED4_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
 
