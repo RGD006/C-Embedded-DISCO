@@ -53,12 +53,15 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+void LED_ToggleGreen(void);
+void LED_ToggleOrange(void);
+void LED_ToggleRed(void);
+void LED_ToggleBlue(void);
+void LED_TurnOnAll(void);
+void LED_TurnOffAll(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_CHANGE_MODE_Pin GPIO_PIN_0
-#define BTN_CHANGE_MODE_GPIO_Port GPIOA
-#define BTN_CHANGE_MODE_EXTI_IRQn EXTI0_IRQn
 #define LED1_Pin GPIO_PIN_12
 #define LED1_GPIO_Port GPIOD
 #define LED2_Pin GPIO_PIN_13
@@ -69,7 +72,13 @@ void Error_Handler(void);
 #define LED4_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
-
+#define USART_COMMAND_TABLE                \
+  X("GREEN LED\r", LED_ToggleGreen, 11)    \
+  X("ORANGE LED\r", LED_ToggleOrange, 12)  \
+  X("RED LED\r", LED_ToggleRed, 8)         \
+  X("BLUE LED\r", LED_ToggleBlue, 9)       \
+  X("TURN ON ALL\r", LED_TurnOnAll, 13)    \
+  X("TURN OFF ALL\r", LED_TurnOffAll, 14)  \
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

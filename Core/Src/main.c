@@ -21,17 +21,19 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef void(*usart_command_f)(void);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define USART1_RX_LEN (32)
+#define USART1_TX_LEN (32)
+#define USART1_NUM_COMMANDS (6)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -40,16 +42,37 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-char usart1_rx[USART1_RX_LEN];
+uint8_t usart1_rx[USART1_RX_LEN];
+uint8_t usart1_tx[USART1_TX_LEN];
+
+char *usart1_commands[USART1_NUM_COMMANDS] = {
+  #define X(COMMAND, FUNCTION, COMMAND_SIZE) COMMAND,
+    USART_COMMAND_TABLE
+  #undef X
+};
+
+size_t usart1_commands_sizes[USART1_NUM_COMMANDS] = {
+  #define X(COMMAND, FUNCTION, COMMAND_SIZE) COMMAND_SIZE,
+    USART_COMMAND_TABLE
+  #undef X
+};
+
+usart_command_f usart1_commands_functions[USART1_NUM_COMMANDS] = {
+  #define X(COMMAND, FUNCTION, COMMAND_SIZE) FUNCTION,
+    USART_COMMAND_TABLE
+  #undef X
+};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART1_UART_Init(void);
+static void MX_USART3_UART_Init(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -88,14 +111,16 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
+  MX_USART3_UART_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_IT(&huart1, usart1_rx, USART1_RX_LEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  
+  HAL_UARTEx_ReceiveToIdle_IT(&huart3, usart1_rx, USART1_RX_LEN);
   while (1) {
     /* USER CODE END WHILE */
 
@@ -146,35 +171,45 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief USART1 Initialization Function
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* USART3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART3_IRQn);
+}
+
+/**
+  * @brief USART3 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_USART1_UART_Init(void)
+static void MX_USART3_UART_Init(void)
 {
 
-  /* USER CODE BEGIN USART1_Init 0 */
+  /* USER CODE BEGIN USART3_Init 0 */
 
-  /* USER CODE END USART1_Init 0 */
+  /* USER CODE END USART3_Init 0 */
 
-  /* USER CODE BEGIN USART1_Init 1 */
+  /* USER CODE BEGIN USART3_Init 1 */
 
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 19200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 19200;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
+  /* USER CODE BEGIN USART3_Init 2 */
+  /* USER CODE END USART3_Init 2 */
 
 }
 
@@ -191,17 +226,11 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : BTN_CHANGE_MODE_Pin */
-  GPIO_InitStruct.Pin = BTN_CHANGE_MODE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(BTN_CHANGE_MODE_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin */
   GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin;
@@ -210,17 +239,61 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
+void LED_ToggleGreen(void)
+{
+  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+}
 
+void LED_ToggleOrange(void)
+{
+  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+}
+
+void LED_ToggleRed(void)
+{
+  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+}
+
+void LED_ToggleBlue(void)
+{
+  HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+}
+
+void LED_TurnOnAll(void)
+{
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_SET);
+}
+
+void LED_TurnOffAll(void)
+{
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
+{
+  if (huart->Instance == USART3) {
+    for (size_t i = 0; i < USART1_NUM_COMMANDS; i++) {
+      if (memcmp(usart1_rx, usart1_commands[i], usart1_commands_sizes[i]) == 0) {
+        usart1_commands_functions[i]();
+        HAL_UART_Transmit_IT(&huart3, (uint8_t *)"Success operation\r\n\0", 21);
+      }
+    }
+  }
+
+  HAL_UARTEx_ReceiveToIdle_IT(&huart3, usart1_rx, USART1_RX_LEN);
+}
 
 /* USER CODE END 4 */
 
