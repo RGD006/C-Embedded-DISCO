@@ -168,7 +168,7 @@ SECTIONS
   } >CCMRAM AT> FLASH
 
   /* used by the startup to initialize data */
-  _sidata = LOADADDR(.data);
+  _si2c_data_buffer = LOADADDR(.data);
 
   /* Initialized data sections goes into RAM, load LMA copy after code */
   .data :

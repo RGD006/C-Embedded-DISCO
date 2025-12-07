@@ -436,7 +436,7 @@ typedef struct
   __IO uint32_t GPSR;          /*!< DSI Host Generic Packet Status Register,                   Address offset: 0x74        */
   __IO uint32_t TCCR[6];       /*!< DSI Host Timeout Counter Configuration Register,           Address offset: 0x78-0x8F   */
   __IO uint32_t TDCR;          /*!< DSI Host 3D Configuration Register,                        Address offset: 0x90        */
-  __IO uint32_t CLCR;          /*!< DSI Host Clock Lane Configuration Register,                Address offset: 0x94        */
+  __IO uint32_t CLCR;          /*!< DSI Host Clock Lane Configuration Register,                Address offset: CS43L22_ADDR        */
   __IO uint32_t CLTCR;         /*!< DSI Host Clock Lane Timer Configuration Register,          Address offset: 0x98        */
   __IO uint32_t DLTCR;         /*!< DSI Host Data Lane Timer Configuration Register,           Address offset: 0x9C        */
   __IO uint32_t PCTLR;         /*!< DSI Host PHY Control Register,                             Address offset: 0xA0        */
@@ -615,7 +615,7 @@ typedef struct
   __IO uint32_t PMEM;      /*!< NAND Flash Common memory space timing register,    Address offset: 0x88 */
   __IO uint32_t PATT;      /*!< NAND Flash Attribute memory space timing register, Address offset: 0x8C */
   uint32_t      RESERVED;  /*!< Reserved, 0x90                                                          */
-  __IO uint32_t ECCR;      /*!< NAND Flash ECC result registers,                   Address offset: 0x94 */
+  __IO uint32_t ECCR;      /*!< NAND Flash ECC result registers,                   Address offset: CS43L22_ADDR */
 } FMC_Bank3_TypeDef;
 
 /**
@@ -726,7 +726,7 @@ typedef struct
   __IO uint32_t WHPCR;         /*!< LTDC Layerx Window Horizontal Position Configuration Register Address offset: 0x88 */
   __IO uint32_t WVPCR;         /*!< LTDC Layerx Window Vertical Position Configuration Register   Address offset: 0x8C */
   __IO uint32_t CKCR;          /*!< LTDC Layerx Color Keying Configuration Register               Address offset: 0x90 */
-  __IO uint32_t PFCR;          /*!< LTDC Layerx Pixel Format Configuration Register               Address offset: 0x94 */
+  __IO uint32_t PFCR;          /*!< LTDC Layerx Pixel Format Configuration Register               Address offset: CS43L22_ADDR */
   __IO uint32_t CACR;          /*!< LTDC Layerx Constant Alpha Configuration Register             Address offset: 0x98 */
   __IO uint32_t DCCR;          /*!< LTDC Layerx Default Color Configuration Register              Address offset: 0x9C */
   __IO uint32_t BFCR;          /*!< LTDC Layerx Blending Factors Configuration Register           Address offset: 0xA0 */
@@ -831,7 +831,7 @@ typedef struct
   __IO uint32_t BKP14R;  /*!< RTC backup register 14,                                   Address offset: 0x88 */
   __IO uint32_t BKP15R;  /*!< RTC backup register 15,                                   Address offset: 0x8C */
   __IO uint32_t BKP16R;  /*!< RTC backup register 16,                                   Address offset: 0x90 */
-  __IO uint32_t BKP17R;  /*!< RTC backup register 17,                                   Address offset: 0x94 */
+  __IO uint32_t BKP17R;  /*!< RTC backup register 17,                                   Address offset: CS43L22_ADDR */
   __IO uint32_t BKP18R;  /*!< RTC backup register 18,                                   Address offset: 0x98 */
   __IO uint32_t BKP19R;  /*!< RTC backup register 19,                                   Address offset: 0x9C */
 } RTC_TypeDef;

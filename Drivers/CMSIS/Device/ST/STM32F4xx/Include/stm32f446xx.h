@@ -435,7 +435,7 @@ typedef struct
   __IO uint32_t PMEM;      /*!< NAND Flash Common memory space timing register,    Address offset: 0x88 */
   __IO uint32_t PATT;      /*!< NAND Flash Attribute memory space timing register, Address offset: 0x8C */
   uint32_t      RESERVED;  /*!< Reserved, 0x90                                                          */
-  __IO uint32_t ECCR;      /*!< NAND Flash ECC result registers,                   Address offset: 0x94 */
+  __IO uint32_t ECCR;      /*!< NAND Flash ECC result registers,                   Address offset: CS43L22_ADDR */
 } FMC_Bank3_TypeDef;
 
 /**
@@ -582,7 +582,7 @@ typedef struct
   __IO uint32_t PLLSAICFGR;    /*!< RCC PLLSAI configuration register,                           Address offset: 0x88 */
   __IO uint32_t DCKCFGR;       /*!< RCC Dedicated Clocks configuration register,                 Address offset: 0x8C */
   __IO uint32_t CKGATENR;      /*!< RCC Clocks Gated ENable Register,                            Address offset: 0x90 */
-  __IO uint32_t DCKCFGR2;      /*!< RCC Dedicated Clocks configuration register 2,               Address offset: 0x94 */
+  __IO uint32_t DCKCFGR2;      /*!< RCC Dedicated Clocks configuration register 2,               Address offset: CS43L22_ADDR */
 } RCC_TypeDef;
 
 /**
@@ -628,7 +628,7 @@ typedef struct
   __IO uint32_t BKP14R;  /*!< RTC backup register 14,                                   Address offset: 0x88 */
   __IO uint32_t BKP15R;  /*!< RTC backup register 15,                                   Address offset: 0x8C */
   __IO uint32_t BKP16R;  /*!< RTC backup register 16,                                   Address offset: 0x90 */
-  __IO uint32_t BKP17R;  /*!< RTC backup register 17,                                   Address offset: 0x94 */
+  __IO uint32_t BKP17R;  /*!< RTC backup register 17,                                   Address offset: CS43L22_ADDR */
   __IO uint32_t BKP18R;  /*!< RTC backup register 18,                                   Address offset: 0x98 */
   __IO uint32_t BKP19R;  /*!< RTC backup register 19,                                   Address offset: 0x9C */
 } RTC_TypeDef;

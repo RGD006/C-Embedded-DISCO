@@ -125,7 +125,7 @@
 #define DAP_ID_CAPABILITIES             0xF0U
 #define DAP_ID_TIMESTAMP_CLOCK          0xF1U
 #define DAP_ID_UART_RX_BUFFER_SIZE      0xFBU
-#define DAP_ID_UART_TX_BUFFER_SIZE      0xFCU
+#define DAP_ID_UART_i2c_data_buffer_SIZE      0xFCU
 #define DAP_ID_SWO_BUFFER_SIZE          0xFDU
 #define DAP_ID_PACKET_COUNT             0xFEU
 #define DAP_ID_PACKET_SIZE              0xFFU

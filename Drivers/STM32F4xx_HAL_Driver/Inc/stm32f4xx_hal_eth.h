@@ -1040,7 +1040,7 @@ TDES7 |                         Transmit Time Stamp High [31:0]                 
 #define ETH_DMA_RX_PROCESS_STOPPED_IT     ETH_DMAIER_RPSIE
 #define ETH_DMA_RX_BUFFER_UNAVAILABLE_IT  ETH_DMAIER_RBUIE
 #define ETH_DMA_RX_IT                     ETH_DMAIER_RIE
-#define ETH_DMA_TX_BUFFER_UNAVAILABLE_IT  ETH_DMAIER_TBUIE
+#define ETH_DMA_i2c_data_buffer_UNAVAILABLE_IT  ETH_DMAIER_TBUIE
 #define ETH_DMA_TX_PROCESS_STOPPED_IT     ETH_DMAIER_TPSIE
 #define ETH_DMA_TX_IT                     ETH_DMAIER_TIE
 /**

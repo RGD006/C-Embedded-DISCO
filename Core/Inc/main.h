@@ -31,7 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -53,12 +52,6 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void LED_ToggleGreen(void);
-void LED_ToggleOrange(void);
-void LED_ToggleRed(void);
-void LED_ToggleBlue(void);
-void LED_TurnOnAll(void);
-void LED_TurnOffAll(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -72,13 +65,8 @@ void LED_TurnOffAll(void);
 #define LED4_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
-#define USART_COMMAND_TABLE                \
-  X("GREEN LED\r", LED_ToggleGreen, 11)    \
-  X("ORANGE LED\r", LED_ToggleOrange, 12)  \
-  X("RED LED\r", LED_ToggleRed, 8)         \
-  X("BLUE LED\r", LED_ToggleBlue, 9)       \
-  X("TURN ON ALL\r", LED_TurnOnAll, 13)    \
-  X("TURN OFF ALL\r", LED_TurnOffAll, 14)  \
+extern I2C_HandleTypeDef hi2c1;
+extern I2S_HandleTypeDef hi2s3;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

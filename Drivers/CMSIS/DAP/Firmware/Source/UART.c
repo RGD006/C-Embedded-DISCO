@@ -61,7 +61,7 @@ static uint8_t  UartTransmitEnabled = 0U;
 static uint8_t  UartTransmitActive = 0U;
 
 // UART TX Buffer
-static uint8_t  UartTxBuf[DAP_UART_TX_BUFFER_SIZE];
+static uint8_t  UartTxBuf[DAP_UART_i2c_data_buffer_SIZE];
 static volatile uint32_t UartTxIndexI = 0U;
 static volatile uint32_t UartTxIndexO = 0U;
 
@@ -281,13 +281,13 @@ static void UART_Transmit (void) {
   uint32_t index;
 
   count = UartTxIndexI - UartTxIndexO;
-  index = UartTxIndexO & (DAP_UART_TX_BUFFER_SIZE - 1U);
+  index = UartTxIndexO & (DAP_UART_i2c_data_buffer_SIZE - 1U);
 
   if (count != 0U) {
-    if ((index + count) <= DAP_UART_TX_BUFFER_SIZE) {
+    if ((index + count) <= DAP_UART_i2c_data_buffer_SIZE) {
       UartTxNum = count;
     } else {
-      UartTxNum = DAP_UART_TX_BUFFER_SIZE - index;
+      UartTxNum = DAP_UART_i2c_data_buffer_SIZE - index;
     }
     UartTransmitActive = 1U;
     pUSART->Send(&UartTxBuf[index], UartTxNum);
@@ -619,15 +619,15 @@ uint32_t UART_Transfer (const uint8_t *request, uint8_t *response) {
     if (UartTransmitActive != 0U) {
       tx_num -= num;
     }
-    if (tx_cnt > (DAP_UART_TX_BUFFER_SIZE - tx_num)) {
-      tx_cnt = (DAP_UART_TX_BUFFER_SIZE - tx_num);
+    if (tx_cnt > (DAP_UART_i2c_data_buffer_SIZE - tx_num)) {
+      tx_cnt = (DAP_UART_i2c_data_buffer_SIZE - tx_num);
     }
 
-    index = UartTxIndexI & (DAP_UART_TX_BUFFER_SIZE - 1U);
-    if ((index + tx_cnt) <= DAP_UART_TX_BUFFER_SIZE) {
+    index = UartTxIndexI & (DAP_UART_i2c_data_buffer_SIZE - 1U);
+    if ((index + tx_cnt) <= DAP_UART_i2c_data_buffer_SIZE) {
       memcpy(&UartTxBuf[index],  tx_data,      tx_cnt);
     } else {
-      num = DAP_UART_TX_BUFFER_SIZE - index;
+      num = DAP_UART_i2c_data_buffer_SIZE - index;
       memcpy(&UartTxBuf[index],  tx_data,      num);
       memcpy(&UartTxBuf[0],     &tx_data[num], tx_cnt - num);
     }

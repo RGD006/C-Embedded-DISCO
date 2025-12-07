@@ -147,12 +147,12 @@ static uint8_t DAP_Info(uint8_t id, uint8_t *info) {
       length = 4U;
 #endif
       break;
-    case DAP_ID_UART_TX_BUFFER_SIZE:
+    case DAP_ID_UART_i2c_data_buffer_SIZE:
 #if (DAP_UART != 0)
-      info[0] = (uint8_t)(DAP_UART_TX_BUFFER_SIZE >>  0);
-      info[1] = (uint8_t)(DAP_UART_TX_BUFFER_SIZE >>  8);
-      info[2] = (uint8_t)(DAP_UART_TX_BUFFER_SIZE >> 16);
-      info[3] = (uint8_t)(DAP_UART_TX_BUFFER_SIZE >> 24);
+      info[0] = (uint8_t)(DAP_UART_i2c_data_buffer_SIZE >>  0);
+      info[1] = (uint8_t)(DAP_UART_i2c_data_buffer_SIZE >>  8);
+      info[2] = (uint8_t)(DAP_UART_i2c_data_buffer_SIZE >> 16);
+      info[3] = (uint8_t)(DAP_UART_i2c_data_buffer_SIZE >> 24);
       length = 4U;
 #endif
       break;

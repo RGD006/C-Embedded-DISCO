@@ -34,7 +34,7 @@
 
 /* start address for the initialization values of the .data section. 
 defined in linker script */
-.word  _sidata
+.word  _si2c_data_buffer
 /* start address for the .data section. defined in linker script */  
 .word  _sdata
 /* end address for the .data section. defined in linker script */
@@ -66,7 +66,7 @@ Reset_Handler:
 /* Copy the data segment initializers from flash to SRAM */  
   ldr r0, =_sdata
   ldr r1, =_edata
-  ldr r2, =_sidata
+  ldr r2, =_si2c_data_buffer
   movs r3, #0
   b LoopCopyDataInit
 
